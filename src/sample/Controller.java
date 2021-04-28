@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Controller {
     Model model;
-    private View view;
+    View view;
 
     public Controller(Model model) {
         this.model = model;
@@ -26,23 +26,22 @@ public class Controller {
         }
     }
 
-    public void setView(View view) throws SQLException {
+    public void setView(View view) {
         this.view = view;
         view.exitBtn.setOnAction(e -> Platform.exit());
         EventHandler<ActionEvent> PrintStudentAverage = e -> {
             try {
-                //PrintStudentCourses(view.StudentsComB.getValue(), view.Comments);
-                PrintsStudentGrades(view.StudentsComB.getValue(), view.Comments);
-                //PrintStudentAVG(view.StudentsComB.getValue(), view.Comments);
+
+                PrintStudentAVG(view.StudentsComB.getValue(), view.Comments);
             } catch (SQLException f) {
                 System.out.println(f.getMessage());
             }
         };
 
         EventHandler<ActionEvent> PrintCourseAverage = e -> {
-            try{
+            try {
                 PrintCourseAVG(view.CoursesComB.getValue(), view.Comments);
-            } catch (SQLException d){
+            } catch (SQLException d) {
                 System.out.println(d.getMessage());
             }
         };
@@ -64,31 +63,28 @@ public class Controller {
         return StudentNames;
     }
 
-    public void PrintCourseAVG(String CourseID, TextArea text) throws SQLException{
+    public void PrintCourseAVG(String CourseID, TextArea text) throws SQLException {
         text.clear();
 
+        System.out.println("\n The average grade for the course " + CourseID);
         model.PreparedStmtSQLQueryCourseAverage();
         model.GetInformation(CourseID);
     }
 
     public void PrintStudentAVG(String StudentID, TextArea text) throws SQLException {
         text.clear();
-        text.appendText("StudentID, average \n");
-        model.PreparedStmtSQLQueryStudentAverage();
-        model.GetInformation(StudentID);
-        //text.appendText(model.GetInformation(StudentID));
-    }
 
-    public void PrintStudentCourses(String StudentID, TextArea text) throws SQLException{
+        System.out.println("Student " + StudentID + " Courses");
         model.PreparedStmtQLQueryStudentCourse();
         model.GetInformation(StudentID);
-    }
-
-    public void PrintsStudentGrades(String StudentID, TextArea text) throws SQLException{
+        System.out.println("\n Student " + StudentID + " Grades in these courses");
         model.PreparedStmtSQLQueryStudentGrade();
         model.GetInformation(StudentID);
+        System.out.println("\n Student " + StudentID + " Average grade:");
+        model.PreparedStmtSQLQueryStudentAverage();
+        model.GetInformation(StudentID);
+
+        //text.appendText(model.GetInformation(StudentID));
     }
-
-
 }
 

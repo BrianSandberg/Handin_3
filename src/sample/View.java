@@ -1,4 +1,5 @@
 package sample;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -27,10 +28,11 @@ public class View {
         CreateAndConfigure();
 
     }
+
     private void CreateAndConfigure() throws SQLException {
         StartView = new GridPane();
         StartView.setMinSize(300, 200);
-        StartView.setPadding(new Insets(10,10, 10, 10));
+        StartView.setPadding(new Insets(10, 10, 10, 10));
         StartView.setVgap(5);
         StartView.setHgap(1);
 
@@ -53,7 +55,7 @@ public class View {
 
     }
 
-    public Parent asParent(){
+    public Parent asParent() {
         return StartView;
     }
 }

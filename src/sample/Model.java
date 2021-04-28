@@ -1,6 +1,5 @@
 package sample;
 
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -32,21 +31,19 @@ public class Model {
     }
 
     //Returns a students courses, based on the StudentID - Prepared statement
-    public void PreparedStmtQLQueryStudentCourse(){
-        ArrayList<String> CourseName = new ArrayList<>();
-        String sql_CourseName = "Select Course from Course " +
-                "INNER JOIN Student ON Student.StudentID = Course.StudentID Where Student.Name = ?;";
+    public void PreparedStmtQLQueryStudentCourse() {
+        String sql_CourseName = "Select Course from ((Course INNER JOIN Grade ON Course.CourseID = Grade.CourseID) " +
+                "INNER JOIN Student ON Student.StudentID = Grade.StudentID) Where Student.Name = ?;";
         try {
             pstmt = conn.prepareStatement(sql_CourseName);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
 
     //Returns a students grades, based on the StudentID - Prepared statement
-    public void PreparedStmtSQLQueryStudentGrade(){
+    public void PreparedStmtSQLQueryStudentGrade() {
         String sql_Grade = "Select Grade from Grade INNER JOIN Student ON Grade.StudentID = Student.StudentID Where Student.Name = ?;";
         try {
             pstmt = conn.prepareStatement(sql_Grade);
@@ -55,7 +52,7 @@ public class Model {
         }
     }
 
-    public void PreparedStmtSQLQueryStudentAverage(){
+    public void PreparedStmtSQLQueryStudentAverage() {
         String sql_AVGGrade = "Select AVG(Grade) from Grade INNER JOIN Student ON Student.StudentID = Grade.StudentID WHERE Student.Name = ?;";
         try {
             pstmt = conn.prepareStatement(sql_AVGGrade);
@@ -64,7 +61,7 @@ public class Model {
         }
     }
 
-    public void PreparedStmtSQLQueryCourseAverage(){
+    public void PreparedStmtSQLQueryCourseAverage() {
         //Joins Grade and Course - Finds the average value of grades in the course we input
         String sql_AVGCourse = "Select AVG(Grade) from Grade INNER JOIN Course ON Course.CourseID = Grade.CourseID Where Course.Course = ?;";
         try {
@@ -75,7 +72,9 @@ public class Model {
     }
 
     //The method executing all prepared statements - Takes String as argument, to make it more versatile
-    public void GetInformation(String StudentID){
+
+    //Cant append this information while its a void signature - Has to be some sort of list, but cant get it to work
+    public void GetInformation(String StudentID) {
         try {
             pstmt.setString(1, StudentID);
             rs = pstmt.executeQuery();
@@ -93,29 +92,10 @@ public class Model {
 
     }
 
-
-    //Returns a students courses, based on the StudentID
-    public ArrayList<String> SQLQueryStudentAVG(String StudentID) throws SQLException{
-        ArrayList<String> average = new ArrayList<>();
-        String sql_Grade = "Select AVG(Grade) from Grade where StudentID = ?;";
-        try {
-            rs = stmt.executeQuery(sql_Grade);
-            while (rs != null && rs.next()) {
-                String name = rs.getString(1);
-                average.add(name);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        rs = null;
-        return average;
-    }
-
-    //Returns a students courses, based on the StudentID
-    public ArrayList<String> SQLQueryStudentCourse() throws SQLException{
+    //Returns a list of courses - Used for the combobox in view
+    public ArrayList<String> SQLQueryStudentCourse() throws SQLException {
         ArrayList<String> CourseName = new ArrayList<>();
         String sql_CourseName = "Select Course from Course;";
-                //"INNER JOIN Grade ON Grade.CourseID = Course.CourseID Where Grade.StudentID= ?;";
         try {
             rs = stmt.executeQuery(sql_CourseName);
             while (rs != null && rs.next()) {
@@ -129,10 +109,10 @@ public class Model {
         return CourseName;
     }
 
-    public ArrayList<String> SQLQueryStudentNames() throws SQLException{
+    //Returns a list of the names of students - Only used for the combobox in view
+    public ArrayList<String> SQLQueryStudentNames() throws SQLException {
         ArrayList<String> StudentName = new ArrayList<>();
         String sql_CourseName = "Select Name from Student;";
-        //"INNER JOIN Grade ON Grade.CourseID = Course.CourseI D Where Grade.StudentID= ?;";
         try {
             rs = stmt.executeQuery(sql_CourseName);
             while (rs != null && rs.next()) {
@@ -146,9 +126,4 @@ public class Model {
         return StudentName;
     }
 
-    public void printNames(ArrayList<String> Names) {
-        for (int i = 0; i < Names.size(); i++) {
-            System.out.println(Names.get(i));
-        }
-    }
 }
