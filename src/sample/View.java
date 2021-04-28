@@ -8,25 +8,25 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-
 import java.sql.SQLException;
 
 public class View {
     Controller control;
     private GridPane StartView;
-    Button exitBtn = new Button("Exit(penis)");
+    //Creates the different elements in the pane
+    Button exitBtn = new Button("Exit");
     Button FindStudentAverage = new Button("Find students average");
     Button FindCourseAverage = new Button("Find Course Average");
     Label AverageCourseGradeLbl = new Label("Average grade for course:");
     Label AverageStudentGradeLbl = new Label("Average grade for student:");
+    //This TextArea is not really used in the current version of the program, but is kept in for further development purposes
     TextArea Comments = new TextArea();
-    ComboBox<String> CoursesComB = new ComboBox<String>();
-    ComboBox<String> StudentsComB = new ComboBox<String>();
+    ComboBox<String> CoursesComB = new ComboBox<>();
+    ComboBox<String> StudentsComB = new ComboBox<>();
 
     public View(Controller control) throws SQLException {
         this.control = control;
         CreateAndConfigure();
-
     }
 
     private void CreateAndConfigure() throws SQLException {
@@ -55,6 +55,7 @@ public class View {
 
     }
 
+    //A parent is needed to set the scene
     public Parent asParent() {
         return StartView;
     }

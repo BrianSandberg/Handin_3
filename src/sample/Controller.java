@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextArea;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,12 +25,14 @@ public class Controller {
         }
     }
 
+    //The method that handles the actions of the different elements in the 'view'
     public void setView(View view) {
         this.view = view;
+        //We use lambda expressions for this bit of code, to make it shorter and easier to use
+        //Here the lambda expressions are used as eventlisteners for the buttons
         view.exitBtn.setOnAction(e -> Platform.exit());
         EventHandler<ActionEvent> PrintStudentAverage = e -> {
             try {
-
                 PrintStudentAVG(view.StudentsComB.getValue(), view.Comments);
             } catch (SQLException f) {
                 System.out.println(f.getMessage());
@@ -45,7 +46,7 @@ public class Controller {
                 System.out.println(d.getMessage());
             }
         };
-
+        //Sets the actions up with the buttons in the view class
         view.FindStudentAverage.setOnAction(PrintStudentAverage);
         view.FindCourseAverage.setOnAction((PrintCourseAverage));
 
@@ -63,6 +64,7 @@ public class Controller {
         return StudentNames;
     }
 
+    //Since model.GetInformation doesnt return anything, and .appenText() requires a String, we have no appended anything
     public void PrintCourseAVG(String CourseID, TextArea text) throws SQLException {
         text.clear();
 
